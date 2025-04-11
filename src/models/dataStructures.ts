@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase/firestore";
-import { getDatabase, ref, set, onValue, DatabaseReference } from "firebase/database";
 
 // Runner interface
 export interface Runner {

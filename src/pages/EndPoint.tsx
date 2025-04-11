@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { updateRunnerEndTime, getAllRunners } from '../utils/firebaseUtils';
 import type { Runner } from '../models/dataStructures';
 
@@ -12,7 +11,6 @@ function EndPoint() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [refreshInterval, setRefreshInterval] = useState<number | null>(null);
-  const navigate = useNavigate();
 
   // Load all active runners
   const loadActiveRunners = async () => {

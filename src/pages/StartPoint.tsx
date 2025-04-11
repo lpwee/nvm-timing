@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { createNewRunner } from '../utils/firebaseUtils';
 
 function StartPoint() {
   const [runnerNames, setRunnerNames] = useState<string[]>(["", "", "", "", ""]);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   // Update a specific runner name
   const updateRunnerName = (index: number, name: string) => {
@@ -32,7 +30,7 @@ function StartPoint() {
     try {
       // Create all runners with the same timestamp
       const promises = validRunnerNames.map(name => createNewRunner(name));
-      const runnerIds = await Promise.all(promises);
+      await Promise.all(promises);
       
       setMessage(`${validRunnerNames.length} runner(s) started successfully!`);
       setRunnerNames(["", "", "", "", ""]); // Clear all inputs

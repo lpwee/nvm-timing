@@ -79,11 +79,6 @@ function StartPoint() {
           </button>
         </div>
       </form>
-      
-      <div className="navigation-links">
-        <a href="/end-point">End Point</a>
-        <a href="/results">Results</a>
-      </div>
     </div>
   );
 }

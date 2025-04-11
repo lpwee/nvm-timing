@@ -122,11 +122,6 @@ function EndPoint() {
           </div>
         )}
       </div>
-      
-      <div className="navigation-links">
-        <a href="/start-point">Start Point</a>
-        <a href="/results">Results</a>
-      </div>
     </div>
   );
 }

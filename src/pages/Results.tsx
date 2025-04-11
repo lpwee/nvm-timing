@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAllRunners, calculateDuration, deleteRunner } from '../utils/firebaseUtils';
 import type { Runner } from '../models/dataStructures';
 
@@ -22,7 +21,6 @@ function Results() {
     runnerName: null
   });
   const [isDeleting, setIsDeleting] = useState(false);
-  const navigate = useNavigate();
 
   // Function to fetch all runners
   const fetchRunners = async () => {
@@ -210,7 +208,12 @@ function Results() {
             <button 
               type="button" 
               className="start-button"
-              onClick={() => navigate('/start-point')}
+              onClick={() => {
+                // This will be handled by the parent App component
+                // which will switch to the Start tab
+                const tabButton = document.querySelector('.tab:first-child') as HTMLButtonElement;
+                if (tabButton) tabButton.click();
+              }}
             >
               Start New Runner
             </button>
@@ -247,10 +250,6 @@ function Results() {
         </div>
       )}
       
-      <div className="navigation-links">
-        <a href="/start-point">Start Point</a>
-        <a href="/end-point">End Point</a>
-      </div>
     </div>
   );
 }

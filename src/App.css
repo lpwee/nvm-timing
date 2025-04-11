@@ -4,7 +4,46 @@
   padding: 2rem;
   text-align: center;
 }
-/* hi */
+
+/* Tab styling */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #555;
+}
+
+.tab:hover {
+  color: #2196f3;
+}
+
+.tab.active {
+  color: #2196f3;
+  border-bottom: 3px solid #2196f3;
+}
+
+.tab-content {
+  width: 100%;
+}
+
 /* Container styling */
 .container {
   display: flex;

@@ -157,40 +157,60 @@ function Results() {
   };
 
   return (
-    <div className="container results-container">
-      <h1>Results</h1>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
+      <h1 className="text-center text-purple-700 text-2xl font-bold mb-6 pb-2 relative">
+        Results
+        <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-purple-500 rounded"></span>
+      </h1>
       
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="mb-6 p-4 rounded-lg bg-red-100 border-l-4 border-red-500 text-red-700 animate-fadeIn">
+          {error}
+        </div>
+      )}
       
       {isLoading ? (
-        <div className="loading">Loading results...</div>
+        <div className="py-12 text-center text-gray-500 italic bg-gray-50 rounded-lg shadow-inner">
+          Loading results...
+        </div>
       ) : (
         <>
           {runners.length === 0 ? (
-            <div className="no-results">No runners found. Start a new runner to see results.</div>
+            <div className="py-12 text-center text-gray-500 italic bg-gray-50 rounded-lg shadow-inner">
+              No runners found. Start a new runner to see results.
+            </div>
           ) : (
-            <div className="results-table-container">
-              <table className="results-table">
+            <div className="overflow-x-auto rounded-lg shadow-sm">
+              <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Duration</th>
-                    <th>Actions</th>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-3 font-semibold text-gray-600 border-b">Name</th>
+                    <th className="px-4 py-3 font-semibold text-gray-600 border-b">Start Time</th>
+                    <th className="px-4 py-3 font-semibold text-gray-600 border-b">End Time</th>
+                    <th className="px-4 py-3 font-semibold text-gray-600 border-b">Duration</th>
+                    <th className="px-4 py-3 font-semibold text-gray-600 border-b">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {runners.map(runner => (
-                    <tr key={runner.id} className={runner.duration === null ? 'in-progress' : ''}>
-                      <td>{runner.name}</td>
-                      <td>{formatTimestamp(runner.startTime)}</td>
-                      <td>{formatTimestamp(runner.endtime)}</td>
-                      <td>{formatDuration(runner.duration)}</td>
-                      <td>
+                    <tr 
+                      key={runner.id} 
+                      className={`border-b hover:bg-gray-50 ${
+                        runner.duration === null 
+                          ? 'bg-purple-50 relative before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:bg-purple-400' 
+                          : ''
+                      }`}
+                    >
+                      <td className="px-4 py-3 text-gray-800">{runner.name}</td>
+                      <td className="px-4 py-3 text-gray-600 text-sm">{formatTimestamp(runner.startTime)}</td>
+                      <td className="px-4 py-3 text-gray-600 text-sm">{formatTimestamp(runner.endtime)}</td>
+                      <td className={`px-4 py-3 font-medium ${runner.duration === null ? 'text-purple-600' : 'text-gray-800'}`}>
+                        {formatDuration(runner.duration)}
+                      </td>
+                      <td className="px-4 py-3">
                         <button 
                           type="button" 
-                          className="delete-button"
+                          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-xs font-semibold shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                           onClick={() => handleDeleteClick(runner.id, runner.name)}
                           disabled={isDeleting}
                         >
@@ -204,14 +224,14 @@ function Results() {
             </div>
           )}
           
-          <div className="button-group">
+          <div className="flex justify-center mt-8 mb-4">
             <button 
               type="button" 
-              className="start-button"
+              className="bg-purple-700 hover:bg-purple-800 text-white py-3 px-7 rounded-lg text-base font-semibold shadow-md transition-all transform hover:-translate-y-1"
               onClick={() => {
                 // This will be handled by the parent App component
                 // which will switch to the Start tab
-                const tabButton = document.querySelector('.tab:first-child') as HTMLButtonElement;
+                const tabButton = document.querySelector('button:first-child') as HTMLButtonElement;
                 if (tabButton) tabButton.click();
               }}
             >
@@ -223,15 +243,19 @@ function Results() {
       
       {/* Delete Confirmation Dialog */}
       {deleteConfirmation.isOpen && (
-        <div className="confirmation-overlay">
-          <div className="confirmation-dialog">
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete runner "{deleteConfirmation.runnerName}"?</p>
-            <p>This action cannot be undone.</p>
-            <div className="confirmation-buttons">
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-xl p-6 max-w-md w-11/12 shadow-xl animate-scaleIn">
+            <h3 className="text-xl font-bold text-red-600 mb-4">Confirm Delete</h3>
+            <p className="text-gray-700 text-base mb-2">
+              Are you sure you want to delete runner "{deleteConfirmation.runnerName}"?
+            </p>
+            <p className="text-gray-600 text-sm mb-6">
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
               <button 
                 type="button" 
-                className="cancel-button"
+                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded font-medium transition-all"
                 onClick={handleCancelDelete}
                 disabled={isDeleting}
               >
@@ -239,7 +263,7 @@ function Results() {
               </button>
               <button 
                 type="button" 
-                className="delete-button"
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded font-medium transition-all disabled:opacity-70"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
               >
@@ -249,7 +273,6 @@ function Results() {
           </div>
         </div>
       )}
-      
     </div>
   );
 }

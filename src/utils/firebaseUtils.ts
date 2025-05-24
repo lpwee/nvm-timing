@@ -63,6 +63,22 @@ export async function updateRunnerEndTime(runnerId: string): Promise<boolean> {
   }
 }
 
+// Undo a runner's end time update (set endtime back to null)
+export async function undoRunnerEndTime(runnerId: string): Promise<boolean> {
+  const runnerRef = ref(database, `timings/${runnerId}`);
+  
+  try {
+    await update(runnerRef, {
+      endtime: null
+    });
+    console.log("Runner end time undo successful!");
+    return true;
+  } catch (error) {
+    console.error("Error undoing runner end time:", error);
+    return false;
+  }
+}
+
 // Get all runners
 export async function getAllRunners(): Promise<{ [key: string]: Runner }> {
   const runnersRef = ref(database, 'timings');

@@ -2,54 +2,57 @@ import { useState } from 'react';
 import { createNewRunner } from '../utils/firebaseUtils';
 
 function StartPoint() {
-  const [runnerNames, setRunnerNames] = useState<string[]>(["", "", "", "", ""]);
+  const [bibNumbers, setBibNumbers] = useState<string[]>(["", "", "", "", ""]);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Update a specific runner name
-  const updateRunnerName = (index: number, name: string) => {
-    const newRunnerNames = [...runnerNames];
-    newRunnerNames[index] = name;
-    setRunnerNames(newRunnerNames);
+  // Update a specific bib number
+  const updateBibNumber = (index: number, bib: string) => {
+    // Convert to uppercase and remove spaces
+    const formattedBib = bib.toUpperCase().replace(/\s+/g, '');
+    
+    const newBibNumbers = [...bibNumbers];
+    newBibNumbers[index] = formattedBib;
+    setBibNumbers(newBibNumbers);
   };
 
-  // Handle submission of a single runner
-  const handleStartSingleRunner = async (index: number) => {
-    const runnerName = runnerNames[index].trim();
+  // Handle registration of a single bib number
+  const handleRegisterSingleBib = async (index: number) => {
+    const bibNumber = bibNumbers[index].trim();
     
-    if (runnerName === "") {
-      setMessage("Please enter a runner name");
+    if (bibNumber === "") {
+      setMessage("Please enter a bib number");
       return;
     }
     
     setIsLoading(true);
     
     try {
-      await createNewRunner(runnerName);
-      setMessage(`Runner "${runnerName}" started successfully!`);
+      await createNewRunner(bibNumber);
+      setMessage(`Bib #${bibNumber} registered successfully!`);
       
-      // Only clear the submitted runner's input
-      const newRunnerNames = [...runnerNames];
-      newRunnerNames[index] = "";
-      setRunnerNames(newRunnerNames);
+      // Only clear the submitted bib number input
+      const newBibNumbers = [...bibNumbers];
+      newBibNumbers[index] = "";
+      setBibNumbers(newBibNumbers);
       
       setIsLoading(false);
     } catch (error) {
-      console.error("Error starting runner:", error);
-      setMessage("Failed to start runner. Please try again.");
+      console.error("Error registering bib number:", error);
+      setMessage("Failed to register bib number. Please try again.");
       setIsLoading(false);
     }
   };
 
-  // Handle form submission to create multiple runners
-  const handleStartRunners = async (e: React.FormEvent) => {
+  // Handle form submission to register multiple bib numbers
+  const handleRegisterAllBibs = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Filter out empty runner names
-    const validRunnerNames = runnerNames.filter(name => name.trim() !== "");
+    // Filter out empty bib numbers
+    const validBibNumbers = bibNumbers.filter(bib => bib.trim() !== "");
     
-    if (validRunnerNames.length === 0) {
-      setMessage("Please enter at least one runner name");
+    if (validBibNumbers.length === 0) {
+      setMessage("Please enter at least one bib number");
       return;
     }
     
@@ -57,15 +60,15 @@ function StartPoint() {
     
     try {
       // Create all runners with the same timestamp
-      const promises = validRunnerNames.map(name => createNewRunner(name));
+      const promises = validBibNumbers.map(bib => createNewRunner(bib));
       await Promise.all(promises);
       
-      setMessage(`${validRunnerNames.length} runner(s) started successfully!`);
-      setRunnerNames(["", "", "", "", ""]); // Clear all inputs
+      setMessage(`${validBibNumbers.length} bib number(s) registered successfully!`);
+      setBibNumbers(["", "", "", "", ""]); // Clear all inputs
       setIsLoading(false);
     } catch (error) {
-      console.error("Error starting runners:", error);
-      setMessage("Failed to start runners. Please try again.");
+      console.error("Error registering bib numbers:", error);
+      setMessage("Failed to register bib numbers. Please try again.");
       setIsLoading(false);
     }
   };
@@ -83,12 +86,12 @@ function StartPoint() {
         </div>
       )}
       
-      <form onSubmit={handleStartRunners} className="w-full mb-2">
+      <form onSubmit={handleRegisterAllBibs} className="w-full mb-2">
         <div className="flex flex-col gap-1 w-full">
-          {runnerNames.map((name, index) => (
+          {bibNumbers.map((bib, index) => (
             <div key={index} className="mb-1 text-left">
               <label 
-                htmlFor={`runner-${index}`}
+                htmlFor={`bib-${index}`}
                 className="block mb-1 font-semibold text-gray-700 text-xs"
               >
                 Runner {index + 1}:
@@ -96,20 +99,20 @@ function StartPoint() {
               <div className="flex gap-1 w-full items-center">
                 <input
                   type="text"
-                  id={`runner-${index}`}
-                  value={name}
-                  onChange={(e) => updateRunnerName(index, e.target.value)}
+                  id={`bib-${index}`}
+                  value={bib}
+                  onChange={(e) => updateBibNumber(index, e.target.value)}
                   disabled={isLoading}
-                  placeholder="Enter runner name (optional)"
+                  placeholder="Enter Runner Bib Number"
                   className="w-full min-w-0 flex-1 p-1 text-xs border border-gray-200 rounded bg-gray-50 text-gray-900 shadow-sm transition-all focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-300 disabled:opacity-70 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
                 <button 
                   type="button" 
-                  onClick={() => handleStartSingleRunner(index)}
-                  disabled={isLoading || name.trim() === ""}
+                  onClick={() => handleRegisterSingleBib(index)}
+                  disabled={isLoading || bib.trim() === ""}
                   className="bg-purple-500 hover:bg-purple-600 text-white py-1 px-2 rounded text-xs font-semibold shadow-sm transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap flex-shrink-0"
                 >
-                  Submit
+                  Register
                 </button>
               </div>
             </div>
@@ -122,7 +125,7 @@ function StartPoint() {
             disabled={isLoading}
             className="bg-purple-700 hover:bg-purple-800 text-white py-1.5 px-4 rounded text-xs font-semibold shadow-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Starting...' : 'Start All Runners'}
+            {isLoading ? 'Registering...' : 'Register All Bib Numbers'}
           </button>
         </div>
       </form>

@@ -13,20 +13,31 @@ body {
   transition: background-color 0.3s ease;
 }
 
-@layer base {
+/* Base styles without @apply */
+body {
+  background-color: #f3f4f6; /* Equivalent to gray-100 */
+  color: #1f2937; /* Equivalent to gray-800 */
+}
+
+@media (prefers-color-scheme: dark) {
   body {
-    @apply bg-gray-900 text-white dark:bg-white dark:text-gray-900;
+    background-color: #1f2937; /* Equivalent to gray-800 */
+    color: #ffffff; /* White */
   }
-  
-  h1 {
-    @apply text-3xl font-bold;
-  }
-  
-  button {
-    @apply transition-all duration-300;
-  }
-  
-  button:focus, button:focus-visible {
-    @apply outline-none ring-2 ring-blue-500;
-  }
+}
+
+h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+
+button {
+  transition-property: all;
+  transition-duration: 300ms;
+}
+
+button:focus, button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6; /* Equivalent to ring-2 ring-blue-500 */
 }

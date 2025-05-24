@@ -3,9 +3,10 @@ import './App.css';
 import StartPoint from './pages/StartPoint';
 import EndPoint from './pages/EndPoint';
 import Results from './pages/Results';
+import RaceAnalysis from './pages/RaceAnalysis';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'start' | 'end' | 'results'>('start');
+  const [activeTab, setActiveTab] = useState<'start' | 'end' | 'results' | 'analysis'>('start');
 
   return (
     <div className="flex flex-col w-full shadow-lg rounded-xl overflow-hidden bg-gray-100">
@@ -40,12 +41,23 @@ function App() {
         >
           Results
         </button>
+        <button 
+          className={`px-4 py-3 mx-1 font-semibold text-base transition-all border-b-3 ${
+            activeTab === 'analysis' 
+              ? 'text-purple-600 border-b-3 border-purple-500 bg-purple-50' 
+              : 'text-gray-500 hover:text-purple-600 hover:bg-purple-50 border-transparent'
+          }`}
+          onClick={() => setActiveTab('analysis')}
+        >
+          Analysis
+        </button>
       </div>
       
       <div className="w-full p-4 md:p-6">
         {activeTab === 'start' && <StartPoint />}
         {activeTab === 'end' && <EndPoint />}
         {activeTab === 'results' && <Results />}
+        {activeTab === 'analysis' && <RaceAnalysis />}
       </div>
     </div>
   );
